@@ -1,0 +1,189 @@
+class Solution
+{
+public:
+    ListNode *merge_sort(ListNode *head)
+    {
+        if (!head || !head->next)
+            return head;
+        ListNode *slow = head, *fast = head, *pre = slow;
+        while (fast && fast->next)
+        {
+            pre = slow;
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        pre->next = nullptr;
+        ListNode *right = merge_sort(slow);
+        ListNode *left = merge_sort(head);
+        return merge_two(left, right);
+    }
+
+    ListNode *merge_two(ListNode *a, ListNode *b)
+    {
+        if (!a)
+        {
+            return b;
+        }
+        else if (!b)
+        {
+            return a;
+        }
+        else if (a->val <= b->val)
+        {
+            a->next = merge_two(a->next, b);
+            return a;
+        }
+        else
+        {
+            b->next = merge_two(a, b->next);
+            return b;
+        }
+    }
+
+    ListNode *sortList(ListNode *head)
+    {
+        return merge_sort(head);
+    }
+};
+
+logo
+        学习
+            题库
+                讨论
+                    竞赛
+                        求职
+                            商店
+
+                                排序链表
+                                    提交记录 28 /
+    28 个通过测试用例
+        状态：通过
+            执行用时 : 96 ms
+                内存消耗 : 31.8 MB
+                    提交时间：4 分钟前
+                        执行用时分布图表
+                            执行消耗内存分布图表
+                                邀请好友来挑战 排序链表
+                                    提交的代码： 4 分钟前
+                                        语言： cpp
+
+                                            添加备注
+
+                                                /**
+                                                 * Definition for singly-linked list.
+                                                 * struct ListNode {
+                                                 *     int val;
+                                                 *     ListNode *next;
+                                                 *     ListNode() : val(0), next(nullptr) {}
+                                                 *     ListNode(int x) : val(x), next(nullptr) {}
+                                                 *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+                                                 * };
+                                                 */
+                                                ListNode *
+                                                merge(ListNode *a, ListNode *b)
+{
+    if (!a || !b)
+        return a ? a : b;
+    ListNode *Nummy = new ListNode(0);
+    ListNode *t = Nummy;
+    while (a && b)
+    {
+        if (a->val <= b->val)
+        {
+            t->next = a;
+            a = a->next;
+        }
+        else
+        {
+            t->next = b;
+            b = b->next;
+        }
+        t = t->next;
+    }
+    while (a)
+    {
+        t->next = a;
+        a = a->next;
+        t = t->next;
+    }
+    while (b)
+    {
+        t->next = b;
+        b = b->next;
+        t = t->next;
+    }
+    return Nummy->next;
+}
+
+// ListNode* sortList1(ListNode* head, ListNode* tail) {
+//         if (head == nullptr) {
+//             return head;
+//         }
+//         if (head->next == tail) {
+//             head->next = nullptr;
+//             return head;
+//         }
+//         ListNode* slow = head, *fast = head;
+//         while (fast != tail) {
+//             slow = slow->next;
+//             fast = fast->next;
+//             if (fast != tail) {
+//                 fast = fast->next;
+//             }
+//         }
+//         ListNode* mid = slow;
+//         return merge(sortList1(head, mid), sortList1(mid, tail));
+//     }
+
+class Solution
+{
+public:
+    ListNode *sortList(ListNode *head)
+    {
+        if (head == nullptr)
+        {
+            return head;
+        }
+        int length = 0;
+        ListNode *node = head;
+        while (node != nullptr)
+        {
+            length++;
+            node = node->next;
+        }
+        ListNode *dummyHead = new ListNode(0, head);
+        for (int subLength = 1; subLength < length; subLength <<= 1)
+        {
+            ListNode *prev = dummyHead, *curr = dummyHead->next;
+            while (curr != nullptr)
+            {
+                ListNode *head1 = curr;
+                for (int i = 1; i < subLength && curr->next != nullptr; i++)
+                {
+                    curr = curr->next;
+                }
+                ListNode *head2 = curr->next;
+                curr->next = nullptr;
+                curr = head2;
+                for (int i = 1; i < subLength && curr != nullptr && curr->next != nullptr; i++)
+                {
+                    curr = curr->next;
+                }
+                ListNode *next = nullptr;
+                if (curr != nullptr)
+                {
+                    next = curr->next;
+                    curr->next = nullptr;
+                }
+                ListNode *merged = merge(head1, head2);
+                prev->next = merged;
+                while (prev->next != nullptr)
+                {
+                    prev = prev->next;
+                }
+                curr = next;
+            }
+        }
+        return dummyHead->next;
+    }
+};

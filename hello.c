@@ -1,7 +1,13 @@
-#include<stdio.h>
+#include <stdio.h>
 
-int main() {
+int plus(int a, int b)
+{
+	return a + b;
+}
+
+int main()
+{
 	printf("hello,ml");
 	return 0;
 }
-# test whoami again!
+// test whoami again!
